@@ -14,4 +14,4 @@ Pillow==10.4.0
 
 # --- Alineación audio-guión (Whisper local, CPU o GPU CUDA) ---
 # faster-whisper instala ctranslate2, onnxruntime (filtro VAD) y tokenizers.
-faster-whisper==1.0.3
+faster-whisper==1.2.1
