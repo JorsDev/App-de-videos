@@ -1,1 +1,8 @@
 venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+# Videos de prueba generados
+*.mp4

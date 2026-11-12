@@ -1,0 +1,17 @@
+# ==============================================================
+# Generador de Videos Automático - Dependencias exactas
+# Python 3.10+
+#
+# Dependencia EXTERNA (no se instala con pip):
+#   FFmpeg >= 5.0 con soporte libass (filtro "subtitles").
+#   Debe estar en el PATH del sistema (ffmpeg y ffprobe).
+#   Windows: winget install Gyan.FFmpeg
+# ==============================================================
+
+# --- Interfaz gráfica ---
+customtkinter==5.2.2
+Pillow==10.4.0
+
+# --- Alineación audio-guión (Whisper local, CPU o GPU CUDA) ---
+# faster-whisper instala ctranslate2, onnxruntime (filtro VAD) y tokenizers.
+faster-whisper==1.0.3
