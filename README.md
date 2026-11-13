@@ -23,7 +23,8 @@ El pipeline se basa en estándares profesionales de postproducción automatizada
 | Efecto Ken Burns | Acercamientos, alejamientos y paneos suaves alternados (`zoompan` con sobremuestreo anti-temblor). Se puede desactivar. |
 | Música de fondo | Se repite en loop / recorta a la duración de la voz, con fundidos de entrada/salida, volumen configurable (por defecto 18 %) y limitador anti-saturación. Si no se elige música, se exporta solo la voz. |
 | Subtítulos | Archivo `.ass` estilizado (escala con la resolución, margen seguro para TikTok/Reels) quemado con `libass`. Se puede desactivar para exportar el video limpio. |
-| Formatos | **9:16** 1080x1920 (TikTok, Reels, Shorts) · **16:9** 1920x1080 (YouTube) · **1:1** 1080x1080 (Post) · **4:5** 1080x1350 (Instagram Feed) |
+| Formatos | **9:16** 1080×1920 (TikTok, Reels, Shorts) · **16:9** 1920×1080 Full HD (YouTube estándar) · **1:1** 1080×1080 (Post) · **4:5** 1080×1350 (Instagram Feed) |
+| Audio principal | Selector de voz (`.mp3`, `.wav`, `.m4a`) con lectura de duración, botón para cambiar y botón **✕ Quitar**. |
 | Sin base de datos | Todo funciona con el sistema de archivos local; los temporales se eliminan al terminar. |
 
 ---
@@ -79,9 +80,12 @@ flowchart LR
 - [x] `requirements.txt`
 - [x] `utilidades/` (verificador del sistema, gestor de temporales)
 - [x] `modelo/` completo (proyecto, alineador, subtítulos, motor FFmpeg) + pruebas
-- [ ] `vista/` (CustomTkinter)
-- [ ] `controlador/`
-- [ ] `principal.py`
+- [x] `vista/` (CustomTkinter)
+- [x] `controlador/` (hilos, cola segura con `after()`, cancelación)
+- [x] `principal.py`
+- [ ] Pruebas reales de extremo a extremo con FFmpeg
+
+📈 El detalle de cada fase, decisiones técnicas y próximos pasos está en **[PROGRESO.md](PROGRESO.md)**.
 
 ---
 
@@ -107,6 +111,15 @@ pip install -r generador_videos\requirements.txt
 
 La primera alineación descarga automáticamente el modelo de Whisper elegido (por defecto `small`, ~460 MB).
 
+### Ejecutar la aplicación
+
+```powershell
+.\venv\Scripts\Activate.ps1
+python generador_videos\principal.py
+```
+
+**Uso:** selecciona el audio de voz → escribe o carga el guion → agrega imágenes (y ordénalas con ▲▼) → opcionalmente elige música y volumen → elige formato, subtítulos, Ken Burns, modelo de IA y carpeta → **🎬 Generar video**.
+
 ---
 
 ## 🧪 Pruebas
@@ -114,7 +127,7 @@ La primera alineación descarga automáticamente el modelo de Whisper elegido (p
 Desde la carpeta `generador_videos`:
 
 ```powershell
-# Pruebas unitarias (no requieren FFmpeg ni Whisper)
+# Pruebas unitarias del Modelo y del Controlador (no requieren FFmpeg ni Whisper)
 python -m unittest discover -s pruebas -v
 
 # Verificar el entorno
