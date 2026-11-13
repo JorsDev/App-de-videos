@@ -121,6 +121,13 @@ class PruebasControlador(unittest.TestCase):
         self.vista.acciones["quitar_musica"]()
         self.assertFalse(self.controlador.proyecto.tiene_musica_fondo)
 
+    def test_seleccionar_y_quitar_audio_voz(self):
+        self.vista.acciones["seleccionar_audio_voz"](str(self.carpeta / "voz.mp3"))
+        self.assertEqual(self.controlador.proyecto.ruta_audio_voz, self.carpeta / "voz.mp3")
+        self.vista.acciones["quitar_audio_voz"]()
+        self.assertIsNone(self.controlador.proyecto.ruta_audio_voz)
+        self.assertIn(("mostrar_audio_voz", (None,)), self.vista.llamadas)
+
     def test_generar_con_errores_no_lanza_hilo(self):
         self.vista.acciones["generar_video"]()
         self.assertIn("mostrar_errores_validacion", self.vista.nombres_llamadas())

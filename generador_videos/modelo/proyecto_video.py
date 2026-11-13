@@ -34,7 +34,7 @@ class FormatoVideo(Enum):
     """Formatos/plataformas de exportación soportados."""
 
     VERTICAL_9_16 = ("9:16 Vertical", 1080, 1920, "TikTok, Reels, YouTube Shorts")
-    HORIZONTAL_16_9 = ("16:9 Horizontal", 1920, 1080, "YouTube estándar")
+    HORIZONTAL_16_9 = ("16:9 Horizontal", 1920, 1080, "YouTube estándar (1920×1080 Full HD)")
     CUADRADO_1_1 = ("1:1 Cuadrado", 1080, 1080, "Instagram/Facebook Post")
     VERTICAL_FEED_4_5 = ("4:5 Vertical Feed", 1080, 1350, "Instagram Feed")
 
@@ -62,8 +62,12 @@ class FormatoVideo(Enum):
     @classmethod
     def desde_etiqueta(cls, texto: str) -> "FormatoVideo":
         """Obtiene el formato a partir de su etiqueta o descripción completa."""
+        texto_limpio = texto.strip()
         for formato in cls:
-            if texto in (formato.etiqueta, formato.descripcion_completa, formato.name):
+            if (
+                texto_limpio in (formato.etiqueta, formato.descripcion_completa, formato.name)
+                or texto_limpio.startswith(formato.etiqueta)
+            ):
                 return formato
         raise ValueError(f"Formato de video desconocido: {texto!r}")
 
@@ -164,6 +168,10 @@ class ProyectoVideo:
     def quitar_imagen(self, indice: int) -> None:
         """Elimina una imagen de la lista por su índice."""
         del self.rutas_imagenes[indice]
+
+    def quitar_audio_voz(self) -> None:
+        """Limpia la selección del audio principal de voz."""
+        self.ruta_audio_voz = None
 
     def quitar_musica_fondo(self) -> None:
         """Limpia la selección de música de fondo (renderizará solo con la voz)."""

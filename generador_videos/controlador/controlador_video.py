@@ -102,6 +102,7 @@ class ControladorVideo:
     def _registrar_acciones_vista(self) -> None:
         acciones: dict[str, Callable[..., Any]] = {
             "seleccionar_audio_voz": self.seleccionar_audio_voz,
+            "quitar_audio_voz": self.quitar_audio_voz,
             "cargar_guion_archivo": self.cargar_guion_desde_archivo,
             "agregar_imagenes": self.agregar_imagenes,
             "agregar_carpeta_imagenes": self.agregar_carpeta_imagenes,
@@ -237,6 +238,11 @@ class ControladorVideo:
         self.proyecto.ruta_audio_voz = Path(ruta)
         self.vista.mostrar_audio_voz(Path(ruta).name, "calculando duración...")
         self._ejecutar_en_segundo_plano(self._tarea_calcular_duracion_voz, Path(ruta), nombre="HiloDuracionVoz")
+
+    def quitar_audio_voz(self) -> None:
+        """Limpia la selección del audio principal de voz."""
+        self.proyecto.quitar_audio_voz()
+        self.vista.mostrar_audio_voz(None)
 
     def _tarea_calcular_duracion_voz(self, ruta: Path) -> None:
         detalle = ""

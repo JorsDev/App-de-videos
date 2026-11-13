@@ -54,19 +54,45 @@ ESPACIADO_INTERNO = 8
 # Formatos de exportación (las etiquetas coinciden con el Modelo)
 # ---------------------------------------------------------------------- #
 FORMATOS_VIDEO: list[dict] = [
-    {"etiqueta": "9:16 Vertical", "ancho": 1080, "alto": 1920, "plataformas": "TikTok, Reels, YouTube Shorts"},
-    {"etiqueta": "16:9 Horizontal", "ancho": 1920, "alto": 1080, "plataformas": "YouTube estándar"},
-    {"etiqueta": "1:1 Cuadrado", "ancho": 1080, "alto": 1080, "plataformas": "Instagram/Facebook Post"},
-    {"etiqueta": "4:5 Vertical Feed", "ancho": 1080, "alto": 1350, "plataformas": "Instagram Feed"},
+    {
+        "etiqueta": "9:16 Vertical (1080×1920)",
+        "clave": "9:16 Vertical",
+        "ancho": 1080,
+        "alto": 1920,
+        "plataformas": "TikTok, Reels, YouTube Shorts (Full HD Vertical)",
+    },
+    {
+        "etiqueta": "16:9 Horizontal (1920×1080 Full HD)",
+        "clave": "16:9 Horizontal",
+        "ancho": 1920,
+        "alto": 1080,
+        "plataformas": "YouTube estándar — Full HD 1080p",
+    },
+    {
+        "etiqueta": "1:1 Cuadrado (1080×1080)",
+        "clave": "1:1 Cuadrado",
+        "ancho": 1080,
+        "alto": 1080,
+        "plataformas": "Instagram/Facebook Post",
+    },
+    {
+        "etiqueta": "4:5 Vertical Feed (1080×1350)",
+        "clave": "4:5 Vertical Feed",
+        "ancho": 1080,
+        "alto": 1350,
+        "plataformas": "Instagram Feed",
+    },
 ]
 ETIQUETAS_FORMATOS = [formato["etiqueta"] for formato in FORMATOS_VIDEO]
 FORMATO_POR_DEFECTO = ETIQUETAS_FORMATOS[0]
 
 
 def obtener_formato_por_etiqueta(etiqueta: str) -> dict:
-    """Devuelve el diccionario del formato con esa etiqueta (o el primero)."""
+    """Devuelve el diccionario del formato con esa etiqueta o clave (o el primero)."""
+    etiqueta_limpia = etiqueta.strip()
     for formato in FORMATOS_VIDEO:
-        if formato["etiqueta"] == etiqueta:
+        clave = formato.get("clave", "")
+        if etiqueta_limpia in (formato["etiqueta"], clave) or (clave and etiqueta_limpia.startswith(clave)):
             return formato
     return FORMATOS_VIDEO[0]
 

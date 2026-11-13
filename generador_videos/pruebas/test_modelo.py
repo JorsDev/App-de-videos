@@ -80,7 +80,18 @@ class PruebasProyectoVideo(unittest.TestCase):
 
     def test_formatos(self):
         self.assertEqual(FormatoVideo.VERTICAL_9_16.resolucion, (1080, 1920))
+        self.assertEqual(FormatoVideo.HORIZONTAL_16_9.resolucion, (1920, 1080))
         self.assertEqual(FormatoVideo.desde_etiqueta("4:5 Vertical Feed"), FormatoVideo.VERTICAL_FEED_4_5)
+        self.assertEqual(
+            FormatoVideo.desde_etiqueta("16:9 Horizontal (1920×1080 Full HD)"),
+            FormatoVideo.HORIZONTAL_16_9,
+        )
+
+    def test_quitar_audio_voz(self):
+        proyecto = ProyectoVideo(ruta_audio_voz="voz.mp3")
+        self.assertIsNotNone(proyecto.ruta_audio_voz)
+        proyecto.quitar_audio_voz()
+        self.assertIsNone(proyecto.ruta_audio_voz)
 
 
 class PruebasAlineador(unittest.TestCase):

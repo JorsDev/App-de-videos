@@ -35,6 +35,7 @@ from vista.paneles import (
 # Nombres de los eventos que la Vista puede emitir hacia el Controlador.
 ACCIONES_DISPONIBLES = (
     "seleccionar_audio_voz",      # (ruta: str)
+    "quitar_audio_voz",           # ()
     "cargar_guion_archivo",       # (ruta: str)
     "agregar_imagenes",           # (rutas: list[str])
     "agregar_carpeta_imagenes",   # (carpeta: str)
@@ -106,7 +107,9 @@ class VentanaPrincipal(ctk.CTk):
         columna_entradas.grid_rowconfigure(1, weight=1)
 
         self.panel_audio_voz = PanelAudioVoz(
-            columna_entradas, al_seleccionar_audio=lambda ruta: self._emitir("seleccionar_audio_voz", ruta)
+            columna_entradas,
+            al_seleccionar_audio=lambda ruta: self._emitir("seleccionar_audio_voz", ruta),
+            al_quitar_audio=lambda: self._emitir("quitar_audio_voz"),
         )
         self.panel_audio_voz.grid(row=0, column=0, sticky="ew", pady=(0, ESPACIADO))
         self.panel_guion = PanelGuion(

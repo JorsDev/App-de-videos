@@ -70,7 +70,13 @@ def crear_boton_secundario(master, texto: str, comando, ancho: int = 120) -> ctk
 class PanelAudioVoz(TarjetaPanel):
     """Selector del audio principal (voz)."""
 
-    def __init__(self, master, al_seleccionar_audio: CallbackRuta = None, **kwargs) -> None:
+    def __init__(
+        self,
+        master,
+        al_seleccionar_audio: CallbackRuta = None,
+        al_quitar_audio: CallbackSinArgumentos = None,
+        **kwargs,
+    ) -> None:
         super().__init__(master, "Audio principal (voz)", "🎙️", **kwargs)
         self._al_seleccionar_audio = al_seleccionar_audio
 
@@ -79,10 +85,16 @@ class PanelAudioVoz(TarjetaPanel):
             text_color=COLORES["texto_secundario"], font=FUENTES["normal"],
         )
         self.etiqueta_archivo.grid(row=0, column=0, sticky="ew", padx=(0, ESPACIADO_INTERNO))
-        ctk.CTkButton(
-            self.contenido, text="Seleccionar audio", width=140, command=self._abrir_dialogo,
+        self.boton_seleccionar = ctk.CTkButton(
+            self.contenido, text="Seleccionar audio", width=130, command=self._abrir_dialogo,
             fg_color=COLORES["acento"], hover_color=COLORES["acento_hover"],
-        ).grid(row=0, column=1)
+        )
+        self.boton_seleccionar.grid(row=0, column=1)
+        self.boton_quitar = ctk.CTkButton(
+            self.contenido, text="✕ Quitar", width=85, command=al_quitar_audio, state="disabled",
+            fg_color=COLORES["peligro"], hover_color=COLORES["peligro_hover"],
+        )
+        self.boton_quitar.grid(row=0, column=2, padx=(ESPACIADO_INTERNO, 0))
 
     def _abrir_dialogo(self) -> None:
         ruta = filedialog.askopenfilename(title="Seleccionar audio de voz", filetypes=estilos.TIPOS_ARCHIVO_AUDIO)
@@ -93,9 +105,13 @@ class PanelAudioVoz(TarjetaPanel):
         """Muestra el archivo seleccionado (y un detalle opcional como la duración)."""
         if not nombre_archivo:
             self.etiqueta_archivo.configure(text=estilos.TEXTO_SIN_ARCHIVO, text_color=COLORES["texto_secundario"])
+            self.boton_seleccionar.configure(text="Seleccionar audio")
+            self.boton_quitar.configure(state="disabled")
             return
-        texto = recortar_texto(nombre_archivo, 48) + (f"   ·   {detalle}" if detalle else "")
+        texto = recortar_texto(nombre_archivo, 40) + (f"   ·   {detalle}" if detalle else "")
         self.etiqueta_archivo.configure(text=f"✔ {texto}", text_color=COLORES["texto"])
+        self.boton_seleccionar.configure(text="Cambiar audio")
+        self.boton_quitar.configure(state="normal")
 
 
 # ====================================================================== #
